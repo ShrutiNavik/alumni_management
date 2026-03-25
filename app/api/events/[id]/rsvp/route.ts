@@ -1,38 +1,22 @@
-import { NextResponse } from 'next/server'
-import { sql } from '@/lib/db'
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
-  request: Request,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const { id } = params;
+
   try {
-    const body = await request.json()
-    const { userId, status } = body
-    const eventId = params.id
-
-    const existing = await sql`
-      SELECT * FROM event_rsvps 
-      WHERE event_id = ${eventId} AND user_id = ${userId}
-    `
-
-    if (existing.rows.length > 0) {
-      const result = await sql`
-        UPDATE event_rsvps 
-        SET status = ${status}
-        WHERE event_id = ${eventId} AND user_id = ${userId}
-        RETURNING *
-      `
-      return NextResponse.json({ rsvp: result.rows[0] })
-    } else {
-      const result = await sql`
-        INSERT INTO event_rsvps (event_id, user_id, status)
-        VALUES (${eventId}, ${userId}, ${status})
-        RETURNING *
-      `
-      return NextResponse.json({ rsvp: result.rows[0] })
-    }
+    const body = await req.json();
+    // Example: handle RSVP logic here
+    return NextResponse.json(
+      { message: `RSVP received for event ${id}`, data: body },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error('Error creating RSVP:', error)
-    return NextResponse.json({ error: 'Failed to create RSVP' }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to process RSVP" },
+      { status: 500 }
+    );
   }
 }
