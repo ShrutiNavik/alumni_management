@@ -16,7 +16,7 @@
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
     "@vercel/postgres": "^0.10.0",
-    "@auth/core": "^0.37.2",
+    
     "uploadthing": "^7.4.0",
     "react-hot-toast": "^2.4.1"
   },
